@@ -1,51 +1,54 @@
 require("dotenv").config();
 const PORT = process.env.PORT || 8000;
-const express = require("express") ; 
-const app = express() ; 
+const express = require("express");
+const app = express();
 
-const path = require("path") ; 
-const mongoose = require("mongoose") ; 
-const userRoute = require('./routes/user') ;
-const blogRoute = require('./routes/blog') ;
+const path = require("path");
+const mongoose = require("mongoose");
+const userRoute = require("./routes/user");
+const blogRoute = require("./routes/blog");
 
-const cookieParser = require("cookie-parser") ; 
+const cookieParser = require("cookie-parser");
 
-const { checkForAuthenticationCookie } = require("./middlewares/authentication");
+const {
+  checkForAuthenticationCookie,
+} = require("./middlewares/authentication");
 const Blog = require("./models/blog");
-app.use(express.urlencoded({extended:false})) ; 
-mongoose.connect(process.env.MONGO_URL)
-.then(e=>console.log("MongoDB connected")) ; 
+app.use(express.urlencoded({ extended: false }));
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then((e) => console.log("MongoDB connected"));
 
-app.set("view engine" , "ejs") ; 
-app.set("views",path.resolve("./views")) ; 
+app.set("view engine", "ejs");
+app.set("views", path.resolve("./views"));
 
-app.use(cookieParser()) ; 
-app.use(checkForAuthenticationCookie("token")) ;
-app.use(express.urlencoded({ extended: false })); 
-app.use(express.static(path.resolve("./public"))) ;
- 
-app.use("/user" , userRoute) ;
-app.use("/blog",blogRoute) ;
+app.use(cookieParser());
+app.use(checkForAuthenticationCookie("token"));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.resolve("./public")));
 
-app.get('/signUp',(req,res)=>{
-    res.render("signUp") ; 
-})
-app.get('/signIn',(req,res)=>{
-    res.render("signIn") ; 
-})
+app.use("/user", userRoute);
+app.use("/blog", blogRoute);
 
-app.get("/", async (req, res) => {
-    try {
-        const allBlogs = await Blog.find({}) ;
-        console.log(allBlogs) ;
-        res.render("home", {
-            user: req.user,
-            blogs: allBlogs,
-        });
-    } catch (error) {
-        console.error(error);
-        // Handle the error appropriately
-    }
+app.get("/signUp", (req, res) => {
+  res.render("signUp");
+});
+app.get("/signIn", (req, res) => {
+  res.render("signIn");
 });
 
-app.listen(PORT ,()=>console.log(`server started at PORT ${PORT}`))
+app.get("/", async (req, res) => {
+  try {
+    const allBlogs = await Blog.find({});
+    console.log(allBlogs);
+    res.render("home", {
+      user: req.user,
+      blogs: allBlogs,
+    });
+  } catch (error) {
+    console.error(error);
+    // Handle the error appropriately
+  }
+});
+
+app.listen(PORT, () => console.log(`server started at PORT ${PORT}`));
