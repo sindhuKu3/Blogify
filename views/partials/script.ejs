@@ -1,0 +1,24 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+  
+    const trashcan = document.querySelector('a.delete');
+trashcan.addEventListener('click', (e) => {
+    // Add the alert function to provide a confirmation
+    if (confirm('Are you sure you want to delete this item?')) {
+        const endpoint = `/blog/${trashcan.dataset.doc}`;
+        fetch(endpoint, {
+                method: 'DELETE'
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                window.location.href = data.redirect;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+});
+</script>
