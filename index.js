@@ -9,11 +9,18 @@ const userRoute = require("./routes/user");
 const blogRoute = require("./routes/blog");
 
 const cookieParser = require("cookie-parser");
-
 const {
   checkForAuthenticationCookie,
 } = require("./middlewares/authentication");
 const Blog = require("./models/blog");
+const corsConfig={
+origin:"*",
+credential:true,
+method:["GET","POST","PUT","DELETE"],
+};
+app.use(cors(corsConfig)) ;
+app.options("",cors(corsConfig)) ; 
+app.use(cors(corsConfig)) ; 
 app.use(express.urlencoded({ extended: false }));
 mongoose
   .connect(process.env.MONGO_URL)
