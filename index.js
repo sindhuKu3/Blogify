@@ -2,7 +2,7 @@ require("dotenv").config();
 const PORT = process.env.PORT || 8000;
 const express = require("express");
 const app = express();
-const cors = require(cors()) ; 
+ 
 const path = require("path");
 const mongoose = require("mongoose");
 const userRoute = require("./routes/user");
@@ -18,9 +18,7 @@ origin:"*",
 credential:true,
 method:["GET","POST","PUT","DELETE"],
 };
-app.use(cors(corsConfig)) ;
-app.options("",cors(corsConfig)) ; 
-app.use(cors(corsConfig)) ; 
+
 app.use(express.urlencoded({ extended: false }));
 mongoose
   .connect(process.env.MONGO_URL)
@@ -33,7 +31,7 @@ app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.resolve("./public")));
-app.use(cors()) ; 
+
 app.use("/user", userRoute);
 app.use("/blog", blogRoute);
 
