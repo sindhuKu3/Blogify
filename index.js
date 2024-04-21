@@ -2,7 +2,7 @@ require("dotenv").config();
 const PORT = process.env.PORT || 8000;
 const express = require("express");
 const app = express();
-
+ 
 const path = require("path");
 const mongoose = require("mongoose");
 const userRoute = require("./routes/user");
@@ -13,6 +13,11 @@ const {
   checkForAuthenticationCookie,
 } = require("./middlewares/authentication");
 const Blog = require("./models/blog");
+const corsConfig={
+origin:"*",
+credential:true,
+method:["GET","POST","PUT","DELETE"],
+};
 
 app.use(express.urlencoded({ extended: false }));
 mongoose
