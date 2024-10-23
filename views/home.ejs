@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,3 +60,65 @@
      <%- include('./partials/footer') %>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogify</title>
+    <style>
+      .card{
+        margin-bottom:50px ;
+      }
+      .card-text{
+         overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+     .card-img-top{
+      height:250px ;
+     }
+     .btn-primary{
+      width:200px ;
+      margin-bottom:10px ; 
+     }
+    .row{
+   display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 6fr));
+  gap: 0.4vw !important;
+  margin-left: 15px;
+     }
+   
+    </style>
+</head>
+<body>
+    <%- include('./partials/nav') %>
+    <div class="container mt-3">
+      <div class="container text-center">
+        <div class="row row-cols-4  blogsection">
+         
+        <% console.log(blogs) %>
+          <% blogs.forEach((blog)=>{%>
+            <div class="col ">
+              <div class="card col  " style="width: 20rem;">
+                  <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title"><%=blog.title %></h5>
+                    <p class="card-text"><%=blog.body %></p>
+                    <a href="/blog/<%= blog._id %>" class="btn btn-primary">View</a>
+                   <a class="delete btn btn-primary" data-doc="<%= blog._id %>">Delete</a>
+                  </div>
+                </div> 
+              </div>
+         <% }); %>
+      
+      </div>
+    </div>
+  </div>
+    <%- include('./partials/script') %>
+     <%- include('./partials/footer') %>
+</body>
+</html>
+>>>>>>> d708854 (changes)
