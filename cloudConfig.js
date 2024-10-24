@@ -5,11 +5,16 @@ cloudinary.config({
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
+console.log(
+  "Cloudinary Config",
+  process.env.CLOUD_NAME,
+  process.env.CLOUD_API_KEY
+);
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "blogify_DEV",
-    allowedformats: ["png", "jpeg", "jpg"],
+    allowedformats: ["png", "jpeg", "jpg", "webp"],
   },
 });
 
