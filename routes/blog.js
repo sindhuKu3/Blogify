@@ -5,7 +5,7 @@ const path = require("path");
 const router = Router();
 const Blog = require("../models/blog");
 const Comment = require("../models/comment");
-const storage =  multer.diskStorage({
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.resolve(`./public/uploads/`));
   },
@@ -14,24 +14,20 @@ const storage =  multer.diskStorage({
     cb(null, fileName);
   },
 });
-const upload = multer({
-  storage: storage,
- 
-});
+const upload = multer({ storage: storage });
 router.get("/add-new", (req, res) => {
   return res.render("addBlog", {
     user: req.user,
   });
 });
 //after this post request all data is stored in outr data base
-router.post("/",  async (req, res) => {
+router.post("/", upload.single("coverImage"), async (req, res) => {
   const { title, body } = req.body;
   const blog = await Blog.create({
     body,
     title,
     createdBy: req.user._id,
-    coverImageURL:   `/uploads/${req.file.filename}`,
-   
+    coverImageURL: `/uploads/${req.file.filename}`,
   });
   return res.redirect(`/blog/${blog._id}`);
 });
@@ -48,16 +44,16 @@ router.get("/:id", async (req, res) => {
   });
 });
 
-router.delete("/:id",async(req,res)=>{
-   const { id } = req.params;
-   Blog.findByIdAndDelete(id)
-     .then((result) => {
-       res.json({redirect: "/" });
-     })
-     .catch((err) => {
-     console.log(err) ; 
-     });
-})
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  Blog.findByIdAndDelete(id)
+    .then((result) => {
+      res.json({ redirect: "/" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 router.post("/comment/:blogId", async (req, res) => {
   await Comment.create({
     content: req.body.content,
