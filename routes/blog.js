@@ -5,31 +5,34 @@ const path = require("path");
 const router = Router();
 const Blog = require("../models/blog");
 const Comment = require("../models/comment");
-const storage = require("../cloudConfig.js");
-//  multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, path.resolve(`./public/uploads/`));
-//   },
-//   filename: function (req, file, cb) {
-//     const fileName = `${Date.now()}-${file.originalname}`;
-//     cb(null, fileName);
-//   },
-// });
-const upload = multer({ storage: storage });
+const storage = require("./public/uploads/");
+ multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.resolve(`./public/uploads/`));
+  },
+  filename: function (req, file, cb) {
+    const fileName = `${Date.now()}-${file.originalname}`;
+    cb(null, fileName);
+  },
+});
+const upload = multer({
+  storage: storage,
+ 
+});
 router.get("/add-new", (req, res) => {
   return res.render("addBlog", {
     user: req.user,
   });
 });
 //after this post request all data is stored in outr data base
-router.post("/", upload.single("coverImage"), async (req, res) => {
+router.post("/",  async (req, res) => {
   const { title, body } = req.body;
   const blog = await Blog.create({
     body,
     title,
     createdBy: req.user._id,
-    coverImageURL:  req.file.path,
-    // `/uploads/${req.file.filename}`,
+    coverImageURL:   `/uploads/${req.file.filename}`,
+   
   });
   return res.redirect(`/blog/${blog._id}`);
 });
